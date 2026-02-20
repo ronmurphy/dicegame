@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Polyhedra - The Dice Collection Game</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- SETUP SCREEN -->
+  <div id="setup-screen" class="screen active">
+    <div class="setup-container">
+      <div class="logo">
+        <div class="logo-dice">
+          <span style="color:#ff6b6b">D4</span>
+          <span style="color:#ff9f43">D6</span>
+          <span style="color:#feca57">D8</span>
+          <span style="color:#48dbfb">D20</span>
+          <span style="color:#fd79a8">D100</span>
+        </div>
+        <h1>POLYHEDRA</h1>
+        <p class="tagline">Collect. Upgrade. Dominate.</p>
+      </div>
+
+      <div class="setup-card">
+        <div class="option-group">
+          <label class="option-label">DIFFICULTY</label>
+          <div class="btn-group" id="difficulty-group">
+            <button class="opt-btn active" data-value="easy">
+              <span class="opt-title">Easy</span>
+              <span class="opt-sub">First to 1× D100</span>
+            </button>
+            <button class="opt-btn" data-value="medium">
+              <span class="opt-title">Medium</span>
+              <span class="opt-sub">First to 3× D100</span>
+            </button>
+            <button class="opt-btn" data-value="hard">
+              <span class="opt-title">Hard</span>
+              <span class="opt-sub">First to 5× D100</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="option-group">
+          <label class="option-label">OPPONENTS</label>
+          <div class="btn-group" id="opponents-group">
+            <button class="opt-btn" data-value="1">1</button>
+            <button class="opt-btn active" data-value="2">2</button>
+            <button class="opt-btn" data-value="3">3</button>
+            <button class="opt-btn" data-value="4">4</button>
+          </div>
+        </div>
+
+        <div class="rules-summary">
+          <h3>How to Play</h3>
+          <ul>
+            <li>Everyone starts with a <strong>D4</strong> (protected from loss until your first choice)</li>
+            <li>Each round: pick a die, roll it <em>N</em> times (N = sides). Highest total wins</li>
+            <li>Winner chooses: <strong>Duplicate</strong> your die OR <strong>Upgrade</strong> to the next die</li>
+            <li>Losers lose a random die to the pool</li>
+            <li>First to reach the target number of D100s wins everything!</li>
+          </ul>
+          <div class="upgrade-path">D4 → D6 → D8 → D10 → D12 → D20 → D100</div>
+        </div>
+
+        <button id="start-btn" class="btn-primary btn-large">Roll the Dice!</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- GAME SCREEN -->
+  <div id="game-screen" class="screen">
+    <header class="game-header">
+      <div class="header-left">
+        <span class="game-title">POLYHEDRA</span>
+        <span id="round-display" class="round-badge">Round 1</span>
+      </div>
+      <div class="header-center">
+        <div class="target-info">
+          <span id="difficulty-badge" class="diff-badge"></span>
+          <span id="target-display"></span>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="pool-summary">
+          <span class="pool-label">POOL</span>
+          <div id="pool-mini"></div>
+        </div>
+      </div>
+    </header>
+
+    <div class="game-body">
+      <!-- Players Grid -->
+      <div id="players-grid"></div>
+
+      <!-- Action Panel -->
+      <div id="action-panel">
+        <!-- Die Selector (shown when human has multiple dice) -->
+        <div id="die-selector" class="action-section hidden">
+          <p class="action-title">Choose your die for this round:</p>
+          <div id="die-options" class="die-options"></div>
+        </div>
+
+        <!-- Roll Button -->
+        <div id="roll-section" class="action-section hidden">
+          <p id="roll-hint" class="action-hint"></p>
+          <button id="roll-btn" class="btn-primary btn-roll">Roll Dice!</button>
+        </div>
+
+        <!-- Round Results -->
+        <div id="results-section" class="action-section hidden">
+          <h3 class="action-title">Round Results</h3>
+          <div id="results-list"></div>
+        </div>
+
+        <!-- Winner Choice -->
+        <div id="choice-section" class="action-section hidden">
+          <h3 class="action-title">You won! Choose your reward:</h3>
+          <div class="choice-buttons">
+            <button id="duplicate-btn" class="btn-choice btn-duplicate">
+              <span class="choice-icon">✦✦</span>
+              <span class="choice-title">Duplicate</span>
+              <span id="duplicate-desc" class="choice-desc"></span>
+            </button>
+            <button id="upgrade-btn" class="btn-choice btn-upgrade">
+              <span class="choice-icon">↑</span>
+              <span class="choice-title">Upgrade</span>
+              <span id="upgrade-desc" class="choice-desc"></span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Next Round / Continue -->
+        <div id="continue-section" class="action-section hidden">
+          <button id="continue-btn" class="btn-primary">Next Round →</button>
+        </div>
+      </div>
+
+      <!-- Event Log -->
+      <div id="event-log">
+        <div class="log-header">Game Log</div>
+        <div id="log-entries"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WIN SCREEN -->
+  <div id="win-screen" class="screen">
+    <div id="dice-shower"></div>
+    <div class="win-content">
+      <div id="win-icon" class="win-icon"></div>
+      <h1 id="win-title"></h1>
+      <p id="win-subtitle"></p>
+      <div id="win-stats"></div>
+      <div id="pool-reward" class="pool-reward hidden">
+        <h3>You claimed the pool!</h3>
+        <div id="pool-dice-display"></div>
+      </div>
+      <button id="play-again-btn" class="btn-primary btn-large">Play Again</button>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
